@@ -1,1 +1,1 @@
-# KutluPartiAdayTan-t-mSitesi
+# KutluPartiAdayTanitimSitesi
