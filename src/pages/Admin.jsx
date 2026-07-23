@@ -5,23 +5,39 @@ export default function Admin({ setAdaylar, adaylar }) {
   const [uretilenLink, setUretilenLink] = useState('')
   const [duzenlenenSlug, setDuzenlenenSlug] = useState(null) // Düzenleme modunu takip eder
 
+  // Dinamik Vaatler ve Galeri Dizileri
+  const [vaatler, setVaatler] = useState([''])
+  const [galeri, setGaleri] = useState([''])
+
   const [form, setForm] = useState({
     ad: '',
     unvan: '',
     slogan: '',
     mesaj: '',
     foto: '',
-    foto2: '',
-    foto3: '',
     biyografi: '',
-    vaat1: '',
-    vaat2: '',
-    vaat3: '',
-    vaat4: '',
     whatsapp: '',
     twitter: '',
     instagram: ''
   })
+
+  // VAAT FONKSİYONLARI
+  const vaatEkle = () => setVaatler([...vaatler, ''])
+  const vaatSil = (index) => setVaatler(vaatler.filter((_, i) => i !== index))
+  const vaatDegis = (index, val) => {
+    const yeni = [...vaatler]
+    yeni[index] = val
+    setVaatler(yeni)
+  }
+
+  // GALERİ FONKSİYONLARI
+  const fotoEkle = () => setGaleri([...galeri, ''])
+  const fotoSil = (index) => setGaleri(galeri.filter((_, i) => i !== index))
+  const fotoDegis = (index, val) => {
+    const yeni = [...galeri]
+    yeni[index] = val
+    setGaleri(yeni)
+  }
 
   // URL Uyumlu Slug Üretici
   const slugUret = (metin) => {
@@ -50,18 +66,22 @@ export default function Admin({ setAdaylar, adaylar }) {
       return
     }
 
-    // Eğer düzenleme modundaysak eski slug'ı kullanırız, yoksa yeni slug üretiriz
     const slug = duzenlenenSlug || slugUret(form.ad)
+
+    const kaydedilecekAday = {
+      ...form,
+      vaatler: vaatler.filter(v => v.trim() !== ''),
+      galeri: galeri.filter(g => g.trim() !== '')
+    }
 
     setAdaylar(prev => ({
       ...prev,
-      [slug]: { ...form }
+      [slug]: kaydedilecekAday
     }))
 
     const tamLink = `${window.location.origin}/aday/${slug}`
     setUretilenLink(tamLink)
     
-    // Düzenleme tamamlandı mesajı
     if (duzenlenenSlug) {
       alert(`✅ ${form.ad} isimli adayın web sitesi başarıyla güncellendi!`)
     }
@@ -72,6 +92,23 @@ export default function Admin({ setAdaylar, adaylar }) {
     const aday = adaylar[slug]
     if (aday) {
       setForm(aday)
+      
+      // Eski vaat1/2/3 yapısı varsa da destekler, yoksa vaatler dizisini alır
+      if (aday.vaatler && aday.vaatler.length > 0) {
+        setVaatler(aday.vaatler)
+      } else {
+        const eskiVaatler = [aday.vaat1, aday.vaat2, aday.vaat3, aday.vaat4].filter(Boolean)
+        setVaatler(eskiVaatler.length > 0 ? eskiVaatler : [''])
+      }
+
+      // Galeri dizisini yükler
+      if (aday.galeri && aday.galeri.length > 0) {
+        setGaleri(aday.galeri)
+      } else {
+        const eskiGaleri = [aday.foto2, aday.foto3].filter(Boolean)
+        setGaleri(eskiGaleri.length > 0 ? eskiGaleri : [''])
+      }
+
       setDuzenlenenSlug(slug)
       setPanelSekme('genel')
       setUretilenLink(`${window.location.origin}/aday/${slug}`)
@@ -94,9 +131,11 @@ export default function Admin({ setAdaylar, adaylar }) {
   const formSifirla = () => {
     setDuzenlenenSlug(null)
     setUretilenLink('')
+    setVaatler([''])
+    setGaleri([''])
     setForm({
-      ad: '', unvan: '', slogan: '', mesaj: '', foto: '', foto2: '', foto3: '',
-      biyografi: '', vaat1: '', vaat2: '', vaat3: '', vaat4: '', whatsapp: '', twitter: '', instagram: ''
+      ad: '', unvan: '', slogan: '', mesaj: '', foto: '',
+      biyografi: '', whatsapp: '', twitter: '', instagram: ''
     })
     setPanelSekme('genel')
   }
@@ -255,22 +294,77 @@ export default function Admin({ setAdaylar, adaylar }) {
                   </div>
                 )}
 
-                {/* 3. PROJELER & VAATLER */}
+                {/* 3. PROJELER & VAATLER (DİNAMİK + BUTONLU) */}
                 {panelSekme === 'projeler' && (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-emerald-400 border-b border-slate-700 pb-2">Proje & Vaat Modülü</h3>
-                    <input type="text" name="vaat1" value={form.vaat1} onChange={handleChange} placeholder="1. Proje / Vaat" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
-                    <input type="text" name="vaat2" value={form.vaat2} onChange={handleChange} placeholder="2. Proje / Vaat" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
-                    <input type="text" name="vaat3" value={form.vaat3} onChange={handleChange} placeholder="3. Proje / Vaat" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                    <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+                      <h3 className="text-xl font-bold text-emerald-400">Proje & Vaat Modülü</h3>
+                      <button
+                        type="button"
+                        onClick={vaatEkle}
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
+                      >
+                        + Yeni Vaat Ekle
+                      </button>
+                    </div>
+
+                    {vaatler.map((v, i) => (
+                      <div key={i} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={v}
+                          onChange={(e) => vaatDegis(i, e.target.value)}
+                          placeholder={`${i + 1}. Proje / Vaat`}
+                          className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white"
+                        />
+                        {vaatler.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => vaatSil(i)}
+                            className="bg-slate-700 hover:bg-red-900/50 text-red-400 border border-slate-600 px-3.5 rounded-xl font-bold transition"
+                          >
+                            🗑️
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
 
-                {/* 4. FOTOĞRAF GALERİSİ */}
+                {/* 4. FOTOĞRAF GALERİSİ (DİNAMİK + BUTONLU) */}
                 {panelSekme === 'galeri' && (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-amber-400 border-b border-slate-700 pb-2">Saha & Etkinlik Fotoğrafları</h3>
-                    <input type="url" name="foto2" value={form.foto2} onChange={handleChange} placeholder="Saha Görseli 1 (URL)" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
-                    <input type="url" name="foto3" value={form.foto3} onChange={handleChange} placeholder="Saha Görseli 2 (URL)" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                    <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+                      <h3 className="text-xl font-bold text-amber-400">Saha & Etkinlik Fotoğrafları</h3>
+                      <button
+                        type="button"
+                        onClick={fotoEkle}
+                        className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
+                      >
+                        + Görsel Linki Ekle
+                      </button>
+                    </div>
+
+                    {galeri.map((g, i) => (
+                      <div key={i} className="flex gap-2">
+                        <input
+                          type="url"
+                          value={g}
+                          onChange={(e) => fotoDegis(i, e.target.value)}
+                          placeholder={`Saha Görseli ${i + 1} (URL)`}
+                          className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white"
+                        />
+                        {galeri.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => fotoSil(i)}
+                            className="bg-slate-700 hover:bg-red-900/50 text-red-400 border border-slate-600 px-3.5 rounded-xl font-bold transition"
+                          >
+                            🗑️
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
 

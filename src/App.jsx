@@ -21,7 +21,7 @@ export default function App() {
     unvan: '[İL / İLÇE VEYA BÖLGE ADAYLIĞI UNVANI]',
     slogan: '"Sizin Sloganınız / Seçim Mottolarınız Buraya Gelecek"',
     mesaj: 'Admin panelinden yazacağınız mesajınız bu alanda görünür.',
-    foto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500',
+    foto: '',
     biyografi: 'Aday özgeçmiş detayları bu alanda yer alacaktır.',
     vaat1: 'Örnek Bölge Projesi 1',
     vaat2: 'Örnek Bölge Projesi 2'
