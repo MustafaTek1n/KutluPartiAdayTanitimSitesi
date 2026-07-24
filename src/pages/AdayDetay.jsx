@@ -3,17 +3,17 @@ import { useParams, Link } from 'react-router-dom'
 
 export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
   const [aktifSekme, setAktifSekme] = useState('anasayfa')
-  const { slug } = useParams() // URL'deki aday kodunu yakalar (Örn: ahmet-yilmaz)
+  const { slug } = useParams() // URL'deki aday kodunu yakalar
 
-  // 1. EĞER URL'DE BİR SLUG VARSA VE ADAYLAR LİSTESİNDE BULUNUYORSA O ADAYI AL
-  // 2. YOKSA GELEN adayVerisi VEYA defaultAday VERİSİNİ KULLAN
+  // If a slug exists and there is data associated with that slug amongst the candidates, we use that data as the active candidate. 
+  // Otherwise, defaultCandidate or candidateData is used.
   let aktifAday = defaultAday || adayVerisi
 
   if (slug && adaylar && adaylar[slug]) {
     aktifAday = adaylar[slug]
   }
 
-  // Eğer hiçbir veri yoksa sayfanın patlamasını engeller
+  // If there is no data, this prevents the page from crashing
   if (!aktifAday) {
     return (
       <div className="min-h-screen bg-sky-900 text-white flex items-center justify-center p-6 text-center">
@@ -41,13 +41,12 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
           {/* Sol Kısım: LOGO + AD SOYAD + UNVAN */}
           <div className="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
             
-            {/* KUTLU PARTİ LOGOSU */}
+            {/* KUTLU PARTİ LOGO */}
             <img 
               src="/logo.png" 
               alt="Kutlu Parti Logo" 
               className="w-20 h-20 md:w-30 md:h-30 object-contain rounded-2xl bg-white p-1.5 shadow-xl border-2 border-sky-200 shrink-0"
               onError={(e) => {
-                // public/logo.png bulunamazsa geçici ikon gösterir
                 e.target.onerror = null;
                 e.target.src = "https://cdn-icons-png.flaticon.com/512/3917/3917705.png";
               }}
@@ -88,7 +87,7 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
         </div>
       </header>
 
-      {/* 2. MENÜ / NAVİGASYON */}
+      {/* MENÜ / NAVİGASYON */}
       <nav className="bg-white border-b border-sky-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-5xl mx-auto flex justify-center overflow-x-auto text-sm font-bold">
           {[
@@ -148,19 +147,65 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
         )}
 
         {/* PROJELER VE VAATLER SEKMESİ */}
-        {aktifSekme === 'projeler' && (
-          <section className="bg-white p-8 rounded-2xl border border-sky-100 shadow-md">
-            <h2 className="text-2xl font-black text-sky-700 mb-6 border-b border-sky-100 pb-3">Seçim Vaatleri ve Projeler</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[aktifAday.vaat1, aktifAday.vaat2, aktifAday.vaat3, aktifAday.vaat4].filter(Boolean).map((vaat, idx) => (
-                <div key={idx} className="bg-sky-50/60 p-5 rounded-xl border border-sky-100 flex items-start gap-3 shadow-sm">
-                  <span className="bg-sky-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">{idx + 1}</span>
-                  <p className="text-slate-800 font-semibold">{vaat}</p>
+{aktifSekme === 'projeler' && (() => {
+  // Verinin hem dizi (array) hem de tekil alan (vaat1, vaat2) olma durumunu kontrol eder
+  const vaatListesi = Array.isArray(aktifAday.vaatler) && aktifAday.vaatler.length > 0
+    ? aktifAday.vaatler.filter(Boolean)
+    : [aktifAday.vaat1, aktifAday.vaat2, aktifAday.vaat3, aktifAday.vaat4].filter(Boolean);
+
+  return (
+    /* 📍 SATIR 1: ANA DIŞ KUTU (Beyaz Zemin & Mavi Gölge/Çerçeve) */
+    <section className="bg-white border border-blue-100 rounded-2xl p-6 shadow-xl transition-all">
+      
+      {/* 📍 SATIR 2: ÜST BAŞLIK ALANI */}
+      <div className="flex items-center justify-between border-b border-blue-100 pb-4 mb-6">
+        
+        {/* Başlık (Koyu Lacivert) */}
+        <h2 className="text-2xl font-black text-blue-950 flex items-center gap-2">
+          🎯 Seçim Vaatleri ve Projeler
+        </h2>
+        
+        {/* Toplam Proje Rozeti (Açık Mavi Kutucuk + Mavi Yazı) */}
+        <span className="text-xs font-mono font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-lg border border-sky-200 shadow-sm">
+          Toplam: {vaatListesi.length} Proje
+        </span>
+      </div>
+
+      {/* 📍 SATIR 3: PROJE KARTLARI LİSTESİ (İç Kutular) */}
+      {vaatListesi.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {vaatListesi.map((vaat, index) => (
+            <div 
+              key={index} 
+              className="relative bg-white border border-blue-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all border-l-4 border-l-sky-500"
+            >
+              {/* Kart Üst Etiket */}
+                <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-sky-50 text-sky-600 rounded border border-sky-100">
+                    PROJE REF: #{String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-[10px] font-medium text-slate-400">
+                    Resmi Taahhüt
+                  </span>
+                </div>
+              
+                {/* Vaat Metni (Koyu Okunaklı Mavi/Lacivert) */}
+                <p className="text-sm font-semibold text-blue-900 leading-relaxed">
+                  {vaat}
+                </p>
                 </div>
               ))}
-            </div>
-          </section>
-        )}
+                </div>
+              ) : (
+                /* Vaat Olmadığında Görünecek Durum */
+                <p className="text-sm text-slate-400 italic text-center py-6">
+                  Henüz eklenmiş bir seçim vaadı bulunmuyor.
+                </p>
+              )}
+
+            </section>
+          );
+        })()}
 
         {/* GALERİ SEKMESİ */}
         {aktifSekme === 'galeri' && (
