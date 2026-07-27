@@ -1,9 +1,19 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
-export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
+export default function AdayDetay({ adayVerisi, adaylar, defaultAday, yukleniyor }) {
   const [aktifSekme, setAktifSekme] = useState('anasayfa')
   const { slug } = useParams() // URL'deki aday kodunu yakalar
+
+  // While Firestore is still delivering the first snapshot, show a loading
+  // state instead of flashing "candidate not found" for a valid slug.
+  if (slug && yukleniyor) {
+    return (
+      <div className="min-h-screen bg-sky-900 text-white flex items-center justify-center p-6 text-center">
+        <p className="text-sky-100 text-sm animate-pulse">Aday bilgileri yükleniyor...</p>
+      </div>
+    )
+  }
 
   // If a slug exists and there is data associated with that slug amongst the candidates, we use that data as the active candidate. 
   // Otherwise, defaultCandidate or candidateData is used.
@@ -45,7 +55,7 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
             <img 
               src="/logo.png" 
               alt="Kutlu Parti Logo" 
-              className="w-20 h-20 md:w-30 md:h-30 object-contain rounded-2xl bg-white p-1.5 shadow-xl border-2 border-sky-200 shrink-0"
+              className="w-20 h-20 md:w-28 md:h-28 object-contain rounded-2xl bg-white p-1.5 shadow-xl border-2 border-sky-200 shrink-0"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "https://cdn-icons-png.flaticon.com/512/3917/3917705.png";
@@ -208,16 +218,43 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday }) {
         })()}
 
         {/* GALERİ SEKMESİ */}
-        {aktifSekme === 'galeri' && (
-          <section className="bg-white p-8 rounded-2xl border border-sky-100 shadow-md">
-            <h2 className="text-2xl font-black text-sky-700 mb-6 border-b border-sky-100 pb-3">Fotoğraf Galerisi</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {[aktifAday.foto, aktifAday.foto2, aktifAday.foto3].filter(Boolean).map((img, idx) => (
-                <img key={idx} src={img} alt="Galeri Foto" className="w-full h-48 object-cover rounded-xl border border-sky-200 hover:scale-105 transition shadow-sm" />
-              ))}
-            </div>
-          </section>
-        )}
+        {aktifSekme === 'galeri' && (() => {
+          // Admin panelindeki dinamik galeri girişleri "galeri" dizisine kaydediliyor.
+          // Ana profil fotoğrafını da (varsa ve zaten galeride yoksa) listeye ekleriz.
+          const hamGorseller = []
+          if (Array.isArray(aktifAday.galeri)) hamGorseller.push(...aktifAday.galeri)
+          if (aktifAday.foto) hamGorseller.push(aktifAday.foto)
+
+          const galeriResimleri = [...new Set(hamGorseller.filter(url => typeof url === 'string' && url.trim() !== ''))]
+
+          return (
+            <section className="bg-white p-8 rounded-2xl border border-sky-100 shadow-md">
+              <h2 className="text-2xl font-black text-sky-700 mb-6 border-b border-sky-100 pb-3">Fotoğraf Galerisi</h2>
+
+              {galeriResimleri.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {galeriResimleri.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt="Galeri Foto"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-48 object-cover rounded-xl border border-sky-200 hover:scale-105 transition shadow-sm bg-slate-100"
+                      onError={(e) => {
+                        e.target.onerror = null
+                        e.target.src = "https://placehold.co/600x400/e2e8f0/1e293b?text=Görsel+Yüklenemedi"
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-400 italic text-center py-8">
+                  Galeride henüz görsel bulunmuyor.
+                </p>
+              )}
+            </section>
+          )
+        })()}
 
         {/* İLETİŞİM SEKMESİ */}
         {aktifSekme === 'iletisim' && (

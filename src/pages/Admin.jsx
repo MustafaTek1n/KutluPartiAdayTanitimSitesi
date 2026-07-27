@@ -1,9 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { doc, setDoc, deleteDoc } from 'firebase/firestore'
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { db, auth } from '../firebase'
 
-export default function Admin({ setAdaylar, adaylar }) {
+export default function Admin({ adaylar }) {
+  // OTURUM / GİRİŞ DURUMU
+  const [kullanici, setKullanici] = useState(null)
+  const [authYukleniyor, setAuthYukleniyor] = useState(true)
+  const [girisEmail, setGirisEmail] = useState('')
+  const [girisSifre, setGirisSifre] = useState('')
+  const [girisHatasi, setGirisHatasi] = useState('')
+  const [girisYapiliyor, setGirisYapiliyor] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setKullanici(user)
+      setAuthYukleniyor(false)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const girisYap = async (e) => {
+    e.preventDefault()
+    setGirisHatasi('')
+    setGirisYapiliyor(true)
+    try {
+      await signInWithEmailAndPassword(auth, girisEmail, girisSifre)
+    } catch (error) {
+      console.error('Giriş hatası:', error.code)
+      setGirisHatasi('E-posta veya şifre hatalı.')
+    } finally {
+      setGirisYapiliyor(false)
+    }
+  }
+
+  const cikisYap = () => {
+    signOut(auth)
+    setGirisEmail('')
+    setGirisSifre('')
+    setGirisHatasi('')
+  }
+
   const [panelSekme, setPanelSekme] = useState('genel')
   const [uretilenLink, setUretilenLink] = useState('')
   const [duzenlenenSlug, setDuzenlenenSlug] = useState(null) // Düzenleme modunu takip eder
+  const [kaydediliyor, setKaydediliyor] = useState(false)
 
   // Dinamik Vaatler ve Galeri Dizileri
   const [vaatler, setVaatler] = useState([''])
@@ -59,14 +100,24 @@ export default function Admin({ setAdaylar, adaylar }) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  // YENİ SİTE ÜRET / GÜNCELLE
-  const siteKaydet = () => {
+  // YENİ SİTE ÜRET / GÜNCELLE (Firestore'a yazar)
+  const siteKaydet = async () => {
     if (!form.ad) {
       alert("Lütfen Aday Ad Soyad alanını doldurun!")
       return
     }
 
-    const slug = duzenlenenSlug || slugUret(form.ad)
+    // Yeni kayıtlarda slug çakışmasını önle (aynı isimden ikinci aday eklenirse -2, -3 diye devam eder)
+    let slug = duzenlenenSlug
+    if (!slug) {
+      const temelSlug = slugUret(form.ad)
+      slug = temelSlug
+      let sayac = 2
+      while (adaylar && adaylar[slug]) {
+        slug = `${temelSlug}-${sayac}`
+        sayac++
+      }
+    }
 
     const kaydedilecekAday = {
       ...form,
@@ -74,16 +125,22 @@ export default function Admin({ setAdaylar, adaylar }) {
       galeri: galeri.filter(g => g.trim() !== '')
     }
 
-    setAdaylar(prev => ({
-      ...prev,
-      [slug]: kaydedilecekAday
-    }))
+    setKaydediliyor(true)
+    try {
+      await setDoc(doc(db, 'adaylar', slug), kaydedilecekAday)
 
-    const tamLink = `${window.location.origin}/aday/${slug}`
-    setUretilenLink(tamLink)
-    
-    if (duzenlenenSlug) {
-      alert(`✅ ${form.ad} isimli adayın web sitesi başarıyla güncellendi!`)
+      const tamLink = `${window.location.origin}/aday/${slug}`
+      setUretilenLink(tamLink)
+      setDuzenlenenSlug(slug)
+
+      if (duzenlenenSlug) {
+        alert(`✅ ${form.ad} isimli adayın web sitesi başarıyla güncellendi!`)
+      }
+    } catch (error) {
+      console.error('Firestore kayıt hatası:', error)
+      alert('❌ Kaydetme sırasında bir hata oluştu, lütfen tekrar deneyin.')
+    } finally {
+      setKaydediliyor(false)
     }
   }
 
@@ -115,15 +172,16 @@ export default function Admin({ setAdaylar, adaylar }) {
     }
   }
 
-  // ADAYI SİL
-  const adaySil = (slug) => {
+  // ADAYI SİL (Firestore'dan siler)
+  const adaySil = async (slug) => {
     if (window.confirm("Bu adayın web sitesini silmek istediğinize emin misiniz?")) {
-      setAdaylar(prev => {
-        const yeniObj = { ...prev }
-        delete yeniObj[slug]
-        return yeniObj
-      })
-      if (duzenlenenSlug === slug) formSifirla()
+      try {
+        await deleteDoc(doc(db, 'adaylar', slug))
+        if (duzenlenenSlug === slug) formSifirla()
+      } catch (error) {
+        console.error('Firestore silme hatası:', error)
+        alert('❌ Silme sırasında bir hata oluştu, lütfen tekrar deneyin.')
+      }
     }
   }
 
@@ -138,6 +196,61 @@ export default function Admin({ setAdaylar, adaylar }) {
       biyografi: '', whatsapp: '', twitter: '', instagram: ''
     })
     setPanelSekme('genel')
+  }
+
+  // AUTH DURUMU HENÜZ BELİRLENMEDİYSE
+  if (authYukleniyor) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <p className="text-slate-400 text-sm animate-pulse">Yükleniyor...</p>
+      </div>
+    )
+  }
+
+  // GİRİŞ YAPILMAMIŞSA LOGIN EKRANI GÖSTER
+  if (!kullanici) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+        <form onSubmit={girisYap} className="bg-slate-800 border border-slate-700 rounded-2xl p-8 w-full max-w-sm shadow-2xl space-y-4">
+          <h2 className="text-xl font-bold text-white text-center mb-2">🏛️ Kutlu Parti Admin Girişi</h2>
+
+          {girisHatasi && (
+            <p className="bg-red-950/60 border border-red-700 text-red-300 text-xs rounded-xl p-3 text-center">{girisHatasi}</p>
+          )}
+
+          <div>
+            <label className="block text-xs font-bold text-slate-300 mb-1">E-posta</label>
+            <input
+              type="email"
+              value={girisEmail}
+              onChange={(e) => setGirisEmail(e.target.value)}
+              required
+              autoComplete="off"
+              className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white outline-none focus:border-sky-500"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-300 mb-1">Şifre</label>
+            <input
+              type="password"
+              value={girisSifre}
+              onChange={(e) => setGirisSifre(e.target.value)}
+              required
+              autoComplete="new-password"
+              className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white outline-none focus:border-sky-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={girisYapiliyor}
+            className="w-full bg-sky-600 hover:bg-sky-500 disabled:bg-sky-800 text-white font-bold py-3 rounded-xl transition"
+          >
+            {girisYapiliyor ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+          </button>
+        </form>
+      </div>
+    )
   }
 
   return (
@@ -179,15 +292,24 @@ export default function Admin({ setAdaylar, adaylar }) {
               </button>
             ))}
           </nav>
+
+          <button
+            type="button"
+            onClick={cikisYap}
+            className="w-full text-left p-3 mt-2 rounded-xl font-medium text-slate-500 hover:bg-slate-700/50 hover:text-red-400 transition text-sm"
+          >
+            🚪 Çıkış Yap
+          </button>
         </div>
 
         {/* KAYDET / GÜNCELLE BUTONU */}
         <button 
           type="button"
           onClick={siteKaydet} 
-          className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-6 cursor-pointer"
+          disabled={kaydediliyor}
+          className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-6 cursor-pointer"
         >
-          {duzenlenenSlug ? '💾 Değişiklikleri Kaydet' : '🚀 Web Sitesini Üret'}
+          {kaydediliyor ? '⏳ Kaydediliyor...' : duzenlenenSlug ? '💾 Değişiklikleri Kaydet' : '🚀 Web Sitesini Üret'}
         </button>
       </aside>
 

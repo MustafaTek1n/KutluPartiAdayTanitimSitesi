@@ -1,22 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { collection, onSnapshot } from 'firebase/firestore'
+import { db } from './firebase'
 import Admin from './pages/Admin'
 import AdayDetay from './pages/AdayDetay'
+import Home from './pages/Home'
 
 export default function App() {
-  // Retrieve saved candidate data from LocalStorage on initial render
-  const [adaylar, setAdaylar] = useState(() => {
-    const kayitliData = localStorage.getItem('kutlu_adaylar')
-    return kayitliData ? JSON.parse(kayitliData) : {}
-  })
+  // Candidate data now lives in Firestore ("adaylar" collection, doc id = slug)
+  const [adaylar, setAdaylar] = useState({})
+  const [yukleniyor, setYukleniyor] = useState(true)
 
   // State to manage contact float modal visibility
   const [iletisimAcik, setIletisimAcik] = useState(false)
 
-  // Synchronize candidate state with LocalStorage on updates
+  // Subscribe to the "adaylar" collection in realtime. Any change made from
+  // the Admin panel (on this device or any other) is reflected here instantly.
   useEffect(() => {
-    localStorage.setItem('kutlu_adaylar', JSON.stringify(adaylar))
-  }, [adaylar])
+    const unsubscribe = onSnapshot(
+      collection(db, 'adaylar'),
+      (snapshot) => {
+        const yeniAdaylar = {}
+        snapshot.forEach((docSnap) => {
+          yeniAdaylar[docSnap.id] = docSnap.data()
+        })
+        setAdaylar(yeniAdaylar)
+        setYukleniyor(false)
+      },
+      (error) => {
+        console.error('Firestore dinleme hatası:', error)
+        setYukleniyor(false)
+      }
+    )
+
+    return () => unsubscribe()
+  }, [])
 
   // Fallback default candidate data structure
   const defaultAday = {
@@ -34,10 +52,10 @@ export default function App() {
     <Router>
       <div className="relative">
         <Routes>
-          <Route path="/" element={<AdayDetay adayVerisi={defaultAday} />} />
+          <Route path="/" element={<Home />} />
           <Route path="/aday" element={<AdayDetay adayVerisi={defaultAday} />} />
-          <Route path="/aday/:slug" element={<AdayDetay adaylar={adaylar} defaultAday={defaultAday} />} />
-          <Route path="/admin" element={<Admin setAdaylar={setAdaylar} adaylar={adaylar} />} />
+          <Route path="/aday/:slug" element={<AdayDetay adaylar={adaylar} defaultAday={defaultAday} yukleniyor={yukleniyor} />} />
+          <Route path="/admin" element={<Admin adaylar={adaylar} />} />
         </Routes>
 
         {/* Floating Contact Widget */}

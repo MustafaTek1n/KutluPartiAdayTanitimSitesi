@@ -67,6 +67,12 @@ export default function Home() {
         {/* Aksiyon Butonları */}
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
           <Link 
+            to="/aday" 
+            className="bg-white border-2 border-sky-500 text-sky-700 hover:bg-sky-50 font-bold px-8 py-3.5 rounded-xl shadow-sm transition-all duration-200 text-center"
+          >
+            Örnek Aday Sayfasını Gör
+          </Link>
+          <Link 
             to="/admin" 
             className="bg-sky-500 hover:bg-sky-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-sky-500/30 transition-all duration-200 text-center"
           >
