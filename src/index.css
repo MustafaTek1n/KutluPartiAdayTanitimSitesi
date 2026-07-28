@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+  --color-kutlu-teal-50: #EEF7F5;
+  --color-kutlu-teal-100: #D3EBE7;
+  --color-kutlu-teal-200: #A8D6CE;
+  --color-kutlu-teal-300: #78BFB3;
+  --color-kutlu-teal-400: #4CA294;
+  --color-kutlu-teal-500: #2E8678;
+  --color-kutlu-teal-600: #1F6F62;
+  --color-kutlu-teal-700: #175A50;
+  --color-kutlu-teal-800: #11433C;
+  --color-kutlu-teal-900: #0B2E29;
+  --color-kutlu-teal-950: #061A17;
+
+  --color-kutlu-orange-50: #FDF2E9;
+  --color-kutlu-orange-100: #FBE1CB;
+  --color-kutlu-orange-200: #F6C296;
+  --color-kutlu-orange-300: #F0A163;
+  --color-kutlu-orange-400: #EA8944;
+  --color-kutlu-orange-500: #E4772A;
+  --color-kutlu-orange-600: #C6631F;
+  --color-kutlu-orange-700: #A15019;
+  --color-kutlu-orange-800: #793C13;
+  --color-kutlu-orange-900: #4F280C;
+  --color-kutlu-orange-950: #2E1707;
+
+  --color-kutlu-ink-50: #FAF8F4;
+  --color-kutlu-ink-100: #F3F0E9;
+  --color-kutlu-ink-200: #E4E0D5;
+  --color-kutlu-ink-300: #C9C4B5;
+  --color-kutlu-ink-400: #9C978A;
+  --color-kutlu-ink-500: #78746A;
+  --color-kutlu-ink-600: #57544C;
+  --color-kutlu-ink-700: #403D37;
+  --color-kutlu-ink-800: #262421;
+  --color-kutlu-ink-900: #141414;
+  --color-kutlu-ink-950: #0A0A0A;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { db, auth } from '../firebase'
@@ -201,8 +201,8 @@ export default function Admin({ adaylar }) {
   // AUTH DURUMU HENÜZ BELİRLENMEDİYSE
   if (authYukleniyor) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <p className="text-slate-400 text-sm animate-pulse">Yükleniyor...</p>
+      <div className="min-h-screen bg-kutlu-ink-900 flex items-center justify-center">
+        <p className="text-kutlu-ink-400 text-sm animate-pulse">Yükleniyor...</p>
       </div>
     )
   }
@@ -210,8 +210,8 @@ export default function Admin({ adaylar }) {
   // GİRİŞ YAPILMAMIŞSA LOGIN EKRANI GÖSTER
   if (!kullanici) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
-        <form onSubmit={girisYap} className="bg-slate-800 border border-slate-700 rounded-2xl p-8 w-full max-w-sm shadow-2xl space-y-4">
+      <div className="min-h-screen bg-kutlu-ink-900 flex items-center justify-center p-6">
+        <form onSubmit={girisYap} className="bg-kutlu-ink-800 border border-kutlu-ink-700 rounded-2xl p-8 w-full max-w-sm shadow-2xl space-y-4">
           <h2 className="text-xl font-bold text-white text-center mb-2">🏛️ Kutlu Parti Admin Girişi</h2>
 
           {girisHatasi && (
@@ -219,32 +219,32 @@ export default function Admin({ adaylar }) {
           )}
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1">E-posta</label>
+            <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">E-posta</label>
             <input
               type="email"
               value={girisEmail}
               onChange={(e) => setGirisEmail(e.target.value)}
               required
               autoComplete="off"
-              className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white outline-none focus:border-sky-500"
+              className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white outline-none focus:border-kutlu-teal-500"
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1">Şifre</label>
+            <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Şifre</label>
             <input
               type="password"
               value={girisSifre}
               onChange={(e) => setGirisSifre(e.target.value)}
               required
               autoComplete="new-password"
-              className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white outline-none focus:border-sky-500"
+              className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white outline-none focus:border-kutlu-teal-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={girisYapiliyor}
-            className="w-full bg-sky-600 hover:bg-sky-500 disabled:bg-sky-800 text-white font-bold py-3 rounded-xl transition"
+            className="w-full bg-kutlu-teal-600 hover:bg-kutlu-teal-500 disabled:bg-kutlu-teal-800 text-white font-bold py-3 rounded-xl transition"
           >
             {girisYapiliyor ? 'Giriş yapılıyor...' : 'Giriş Yap'}
           </button>
@@ -254,10 +254,10 @@ export default function Admin({ adaylar }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col md:flex-row">
+    <div className="min-h-screen bg-kutlu-ink-900 text-white flex flex-col md:flex-row">
       
       {/* SOL MENÜ */}
-      <aside className="w-full md:w-64 bg-slate-800 border-r border-slate-700 p-6 flex flex-col justify-between">
+      <aside className="w-full md:w-64 bg-kutlu-ink-800 border-r border-kutlu-ink-700 p-6 flex flex-col justify-between">
         <div>
           <h2 className="text-xl font-bold text-red-500 mb-6 flex items-center gap-2">
             🏛️ Kutlu Parti Admin
@@ -266,7 +266,7 @@ export default function Admin({ adaylar }) {
           <button 
             type="button" 
             onClick={formSifirla}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-xl mb-4 transition text-sm flex items-center justify-center gap-2"
+            className="w-full bg-kutlu-teal-600 hover:bg-kutlu-teal-500 text-white font-bold p-3 rounded-xl mb-4 transition text-sm flex items-center justify-center gap-2"
           >
             ➕ Formu Sıfırla
           </button>
@@ -285,7 +285,7 @@ export default function Admin({ adaylar }) {
                 type="button"
                 onClick={() => setPanelSekme(s.id)}
                 className={`w-full text-left p-3 rounded-xl font-medium transition ${
-                  panelSekme === s.id ? 'bg-red-600 text-white' : 'text-slate-400 hover:bg-slate-700/50'
+                  panelSekme === s.id ? 'bg-red-600 text-white' : 'text-kutlu-ink-400 hover:bg-kutlu-ink-700/50'
                 }`}
               >
                 {s.etiket}
@@ -296,7 +296,7 @@ export default function Admin({ adaylar }) {
           <button
             type="button"
             onClick={cikisYap}
-            className="w-full text-left p-3 mt-2 rounded-xl font-medium text-slate-500 hover:bg-slate-700/50 hover:text-red-400 transition text-sm"
+            className="w-full text-left p-3 mt-2 rounded-xl font-medium text-kutlu-ink-500 hover:bg-kutlu-ink-700/50 hover:text-red-400 transition text-sm"
           >
             🚪 Çıkış Yap
           </button>
@@ -319,9 +319,9 @@ export default function Admin({ adaylar }) {
 
           {/* DÜZENLEME MODU BİLDİRİMİ */}
           {duzenlenenSlug && (
-            <div className="bg-amber-950/80 border border-amber-500 p-4 rounded-xl flex items-center justify-between text-amber-300 text-sm">
+            <div className="bg-kutlu-orange-950/80 border border-kutlu-orange-500 p-4 rounded-xl flex items-center justify-between text-kutlu-orange-300 text-sm">
               <span>✏️ Şu an <strong>"{form.ad}"</strong> adayın web sitesini düzenliyorsunuz.</span>
-              <button onClick={formSifirla} className="bg-amber-800 hover:bg-amber-700 text-white text-xs px-3 py-1.5 rounded-lg">İptal Et</button>
+              <button onClick={formSifirla} className="bg-kutlu-orange-800 hover:bg-kutlu-orange-700 text-white text-xs px-3 py-1.5 rounded-lg">İptal Et</button>
             </div>
           )}
 
@@ -329,7 +329,7 @@ export default function Admin({ adaylar }) {
           {uretilenLink && (
             <div className="bg-emerald-950/80 border-2 border-emerald-500 p-6 rounded-2xl shadow-2xl">
               <h3 className="text-lg font-bold text-emerald-400 mb-2">🎉 Web Sitesi Yayında!</h3>
-              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-700">
+              <div className="flex items-center gap-3 bg-kutlu-ink-900 p-3 rounded-xl border border-kutlu-ink-700">
                 <input type="text" readOnly value={uretilenLink} className="w-full bg-transparent text-emerald-300 font-mono text-sm focus:outline-none" />
                 <a href={uretilenLink} target="_blank" rel="noreferrer" className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg whitespace-nowrap">
                   Yeni Sekmede Aç ↗
@@ -340,26 +340,26 @@ export default function Admin({ adaylar }) {
 
           {/* 📂 ÜRETİLEN SİTELER LİSTESİ SEKMESİ */}
           {panelSekme === 'liste' && (
-            <div className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 shadow-2xl">
-              <h3 className="text-xl font-bold text-white mb-4 border-b border-slate-700 pb-3">Sistemdeki Aday Web Siteleri</h3>
+            <div className="bg-kutlu-ink-800/80 p-6 rounded-2xl border border-kutlu-ink-700 shadow-2xl">
+              <h3 className="text-xl font-bold text-white mb-4 border-b border-kutlu-ink-700 pb-3">Sistemdeki Aday Web Siteleri</h3>
               
               {Object.keys(adaylar || {}).length === 0 ? (
-                <p className="text-slate-400 text-sm">Henüz kayıtlı bir aday web sitesi yok.</p>
+                <p className="text-kutlu-ink-400 text-sm">Henüz kayıtlı bir aday web sitesi yok.</p>
               ) : (
                 <div className="space-y-3">
                   {Object.keys(adaylar).map((slug) => (
-                    <div key={slug} className="bg-slate-900 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div key={slug} className="bg-kutlu-ink-900 p-4 rounded-xl border border-kutlu-ink-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <h4 className="font-bold text-white text-lg">{adaylar[slug].ad}</h4>
-                        <p className="text-xs text-blue-400">{adaylar[slug].unvan}</p>
-                        <span className="text-xs text-slate-500 font-mono mt-1 block">/aday/{slug}</span>
+                        <p className="text-xs text-kutlu-teal-400">{adaylar[slug].unvan}</p>
+                        <span className="text-xs text-kutlu-ink-500 font-mono mt-1 block">/aday/{slug}</span>
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <a href={`/aday/${slug}`} target="_blank" rel="noreferrer" className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-lg border border-slate-600">
+                        <a href={`/aday/${slug}`} target="_blank" rel="noreferrer" className="bg-kutlu-ink-800 hover:bg-kutlu-ink-700 text-kutlu-ink-200 text-xs px-3 py-2 rounded-lg border border-kutlu-ink-600">
                           Görüntüle ↗
                         </a>
-                        <button onClick={() => adayDuzenle(slug)} className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3 py-2 rounded-lg">
+                        <button onClick={() => adayDuzenle(slug)} className="bg-kutlu-orange-600 hover:bg-kutlu-orange-500 text-white text-xs font-bold px-3 py-2 rounded-lg">
                           ✏️ Düzenle
                         </button>
                         <button onClick={() => adaySil(slug)} className="bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold px-3 py-2 rounded-lg">
@@ -375,28 +375,28 @@ export default function Admin({ adaylar }) {
 
           {/* DOLDURMA FORMU (Diğer Sekmeler) */}
           {panelSekme !== 'liste' && (
-            <div className="bg-slate-800/80 p-8 rounded-2xl border border-slate-700 shadow-2xl">
+            <div className="bg-kutlu-ink-800/80 p-8 rounded-2xl border border-kutlu-ink-700 shadow-2xl">
               <div className="space-y-6">
                 
                 {/* 1. GENEL BİLGİLER */}
                 {panelSekme === 'genel' && (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-red-400 border-b border-slate-700 pb-2">Aday Temel Bilgileri</h3>
+                    <h3 className="text-xl font-bold text-red-400 border-b border-kutlu-ink-700 pb-2">Aday Temel Bilgileri</h3>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">Aday Ad Soyad *</label>
-                      <input type="text" name="ad" value={form.ad} onChange={handleChange} placeholder="Örn: Ahmet Yılmaz" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                      <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Aday Ad Soyad *</label>
+                      <input type="text" name="ad" value={form.ad} onChange={handleChange} placeholder="Örn: Ahmet Yılmaz" className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">Unvan / Seçim Bölgesi *</label>
-                      <input type="text" name="unvan" value={form.unvan} onChange={handleChange} placeholder="İzmir 1. Sıra Milletvekili Adayı" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                      <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Unvan / Seçim Bölgesi *</label>
+                      <input type="text" name="unvan" value={form.unvan} onChange={handleChange} placeholder="İzmir 1. Sıra Milletvekili Adayı" className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">Seçim Sloganı</label>
-                      <input type="text" name="slogan" value={form.slogan} onChange={handleChange} placeholder="Gelecek Gençlikle Yükseliyor!" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                      <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Seçim Sloganı</label>
+                      <input type="text" name="slogan" value={form.slogan} onChange={handleChange} placeholder="Gelecek Gençlikle Yükseliyor!" className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">Profil Fotoğraf Linki (URL)</label>
-                      <input type="url" name="foto" value={form.foto} onChange={handleChange} placeholder="https://..." className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                      <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Profil Fotoğraf Linki (URL)</label>
+                      <input type="url" name="foto" value={form.foto} onChange={handleChange} placeholder="https://..." className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
                     </div>
                   </div>
                 )}
@@ -404,14 +404,14 @@ export default function Admin({ adaylar }) {
                 {/* 2. BİYOGRAFİ & MESAJ */}
                 {panelSekme === 'biyografi' && (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-blue-400 border-b border-slate-700 pb-2">Biyografi & Aday Mesajı</h3>
+                    <h3 className="text-xl font-bold text-kutlu-teal-400 border-b border-kutlu-ink-700 pb-2">Biyografi & Aday Mesajı</h3>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">Milletimize Mesaj</label>
-                      <textarea rows="3" name="mesaj" value={form.mesaj} onChange={handleChange} placeholder="Adayın ilk karşılama mesajı..." className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white"></textarea>
+                      <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Milletimize Mesaj</label>
+                      <textarea rows="3" name="mesaj" value={form.mesaj} onChange={handleChange} placeholder="Adayın ilk karşılama mesajı..." className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white"></textarea>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">Detaylı Özgeçmiş / Biyografi</label>
-                      <textarea rows="6" name="biyografi" value={form.biyografi} onChange={handleChange} placeholder="Adayın özgeçmiş detayları..." className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white"></textarea>
+                      <label className="block text-xs font-bold text-kutlu-ink-300 mb-1">Detaylı Özgeçmiş / Biyografi</label>
+                      <textarea rows="6" name="biyografi" value={form.biyografi} onChange={handleChange} placeholder="Adayın özgeçmiş detayları..." className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white"></textarea>
                     </div>
                   </div>
                 )}
@@ -419,7 +419,7 @@ export default function Admin({ adaylar }) {
                 {/* 3. PROJELER & VAATLER (DİNAMİK + BUTONLU) */}
                 {panelSekme === 'projeler' && (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+                    <div className="flex items-center justify-between border-b border-kutlu-ink-700 pb-2">
                       <h3 className="text-xl font-bold text-emerald-400">Proje & Vaat Modülü</h3>
                       <button
                         type="button"
@@ -437,13 +437,13 @@ export default function Admin({ adaylar }) {
                           value={v}
                           onChange={(e) => vaatDegis(i, e.target.value)}
                           placeholder={`${i + 1}. Proje / Vaat`}
-                          className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white"
+                          className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white"
                         />
                         {vaatler.length > 1 && (
                           <button
                             type="button"
                             onClick={() => vaatSil(i)}
-                            className="bg-slate-700 hover:bg-red-900/50 text-red-400 border border-slate-600 px-3.5 rounded-xl font-bold transition"
+                            className="bg-kutlu-ink-700 hover:bg-red-900/50 text-red-400 border border-kutlu-ink-600 px-3.5 rounded-xl font-bold transition"
                           >
                             🗑️
                           </button>
@@ -456,12 +456,12 @@ export default function Admin({ adaylar }) {
                 {/* 4. FOTOĞRAF GALERİSİ (DİNAMİK + BUTONLU) */}
                 {panelSekme === 'galeri' && (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-slate-700 pb-2">
-                      <h3 className="text-xl font-bold text-amber-400">Saha & Etkinlik Fotoğrafları</h3>
+                    <div className="flex items-center justify-between border-b border-kutlu-ink-700 pb-2">
+                      <h3 className="text-xl font-bold text-kutlu-orange-400">Saha & Etkinlik Fotoğrafları</h3>
                       <button
                         type="button"
                         onClick={fotoEkle}
-                        className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
+                        className="bg-kutlu-orange-600 hover:bg-kutlu-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
                       >
                         + Görsel Linki Ekle
                       </button>
@@ -474,13 +474,13 @@ export default function Admin({ adaylar }) {
                           value={g}
                           onChange={(e) => fotoDegis(i, e.target.value)}
                           placeholder={`Saha Görseli ${i + 1} (URL)`}
-                          className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white"
+                          className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white"
                         />
                         {galeri.length > 1 && (
                           <button
                             type="button"
                             onClick={() => fotoSil(i)}
-                            className="bg-slate-700 hover:bg-red-900/50 text-red-400 border border-slate-600 px-3.5 rounded-xl font-bold transition"
+                            className="bg-kutlu-ink-700 hover:bg-red-900/50 text-red-400 border border-kutlu-ink-600 px-3.5 rounded-xl font-bold transition"
                           >
                             🗑️
                           </button>
@@ -493,10 +493,10 @@ export default function Admin({ adaylar }) {
                 {/* 5. İLETİŞİM & SOSYAL */}
                 {panelSekme === 'iletisim' && (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-purple-400 border-b border-slate-700 pb-2">İletişim Kanalları</h3>
-                    <input type="text" name="whatsapp" value={form.whatsapp} onChange={handleChange} placeholder="WhatsApp Numarası" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
-                    <input type="text" name="twitter" value={form.twitter} onChange={handleChange} placeholder="Twitter (X) Linki" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
-                    <input type="text" name="instagram" value={form.instagram} onChange={handleChange} placeholder="Instagram Linki" className="w-full p-3 bg-slate-700 rounded-xl border border-slate-600 text-white" />
+                    <h3 className="text-xl font-bold text-kutlu-teal-500 border-b border-kutlu-ink-700 pb-2">İletişim Kanalları</h3>
+                    <input type="text" name="whatsapp" value={form.whatsapp} onChange={handleChange} placeholder="WhatsApp Numarası" className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
+                    <input type="text" name="twitter" value={form.twitter} onChange={handleChange} placeholder="Twitter (X) Linki" className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
+                    <input type="text" name="instagram" value={form.instagram} onChange={handleChange} placeholder="Instagram Linki" className="w-full p-3 bg-kutlu-ink-700 rounded-xl border border-kutlu-ink-600 text-white" />
                   </div>
                 )}
 

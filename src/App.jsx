@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { collection, onSnapshot } from 'firebase/firestore'
 import { db } from './firebase'
@@ -63,18 +63,18 @@ export default function App() {
           
           {/* Contact Form Modal */}
           {iletisimAcik && (
-            <div className="mb-4 w-80 md:w-96 bg-slate-900 border border-slate-700/80 rounded-2xl p-5 shadow-2xl backdrop-blur-md animate-fadeIn">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <div className="mb-4 w-80 md:w-96 bg-kutlu-ink-900 border border-kutlu-ink-700/80 rounded-2xl p-5 shadow-2xl backdrop-blur-md animate-fadeIn">
+              <div className="flex items-center justify-between border-b border-kutlu-ink-800 pb-3 mb-4">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">✉️</span>
                   <div>
                     <h4 className="font-bold text-white text-sm">Bize Ulaşın</h4>
-                    <p className="text-[10px] text-slate-400">Görüş ve taleplerinizi iletin</p>
+                    <p className="text-[10px] text-kutlu-ink-400">Görüş ve taleplerinizi iletin</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => setIletisimAcik(false)}
-                  className="text-slate-400 hover:text-white text-lg font-bold w-6 h-6 flex items-center justify-center rounded-lg hover:bg-slate-800"
+                  className="text-kutlu-ink-400 hover:text-white text-lg font-bold w-6 h-6 flex items-center justify-center rounded-lg hover:bg-kutlu-ink-800"
                 >
                   ✕
                 </button>
@@ -119,7 +119,7 @@ export default function App() {
                     name="name" 
                     required 
                     placeholder="Adınız Soyadınız" 
-                    className="w-full p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-white text-xs outline-none focus:border-sky-500"
+                    className="w-full p-2.5 bg-kutlu-ink-950 rounded-xl border border-kutlu-ink-800 text-white text-xs outline-none focus:border-kutlu-teal-500"
                   />
                 </div>
                 <div>
@@ -128,7 +128,7 @@ export default function App() {
                     name="email" 
                     required 
                     placeholder="E-Posta Adresiniz" 
-                    className="w-full p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-white text-xs outline-none focus:border-sky-500"
+                    className="w-full p-2.5 bg-kutlu-ink-950 rounded-xl border border-kutlu-ink-800 text-white text-xs outline-none focus:border-kutlu-teal-500"
                   />
                 </div>
                 <div>
@@ -137,7 +137,7 @@ export default function App() {
                     name="subject" 
                     required 
                     placeholder="Konu (Örn: Adaylık Hakkında)" 
-                    className="w-full p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-white text-xs outline-none focus:border-sky-500"
+                    className="w-full p-2.5 bg-kutlu-ink-950 rounded-xl border border-kutlu-ink-800 text-white text-xs outline-none focus:border-kutlu-teal-500"
                   />
                 </div>
                 <div>
@@ -146,13 +146,13 @@ export default function App() {
                     required 
                     rows="3" 
                     placeholder="Mesajınızı yazın..." 
-                    className="w-full p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-white text-xs outline-none focus:border-sky-500 resize-none"
+                    className="w-full p-2.5 bg-kutlu-ink-950 rounded-xl border border-kutlu-ink-800 text-white text-xs outline-none focus:border-kutlu-teal-500 resize-none"
                   ></textarea>
                 </div>
 
                 <button 
                   type="submit" 
-                  className="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2"
+                  className="w-full bg-kutlu-teal-600 hover:bg-kutlu-teal-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2"
                 >
                   📨 E-Posta Gönder
                 </button>
@@ -163,7 +163,7 @@ export default function App() {
           {/* Floating Toggle Button */}
           <button
             onClick={() => setIletisimAcik(!iletisimAcik)}
-            className="w-14 h-14 bg-sky-600 hover:bg-sky-500 text-white rounded-full flex items-center justify-center shadow-2xl border-2 border-sky-400/30 transition-all duration-300 hover:scale-110 active:scale-95 group relative"
+            className="w-14 h-14 bg-kutlu-teal-600 hover:bg-kutlu-teal-500 text-white rounded-full flex items-center justify-center shadow-2xl border-2 border-kutlu-teal-400/30 transition-all duration-300 hover:scale-110 active:scale-95 group relative"
             title="Bize Ulaşın"
           >
             {iletisimAcik ? (
@@ -174,7 +174,7 @@ export default function App() {
             
             {/* Status indicator pulse dot */}
             {!iletisimAcik && (
-              <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-slate-900 animate-pulse"></span>
+              <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-kutlu-ink-900 animate-pulse"></span>
             )}
           </button>
 
