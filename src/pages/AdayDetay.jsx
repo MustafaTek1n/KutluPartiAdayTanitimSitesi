@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Home, ScrollText, Target, Image, Phone, MessageCircle, MapPin } from 'lucide-react'
 
 export default function AdayDetay({ adayVerisi, adaylar, defaultAday, yukleniyor }) {
   const [aktifSekme, setAktifSekme] = useState('anasayfa')
@@ -101,21 +102,22 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday, yukleniyor
       <nav className="bg-white border-b border-kutlu-teal-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-5xl mx-auto flex justify-center overflow-x-auto text-sm font-bold">
           {[
-            { id: 'anasayfa', etiket: '🏠 Ana Sayfa' },
-            { id: 'biyografi', etiket: '📜 Özgeçmiş' },
-            { id: 'projeler', etiket: '🎯 Projeler & Vaatler' },
-            { id: 'galeri', etiket: '🖼️ Galeri' },
-            { id: 'iletisim', etiket: '📞 İletişim' },
+            { id: 'anasayfa', etiket: 'Ana Sayfa', Icon: Home },
+            { id: 'biyografi', etiket: 'Özgeçmiş', Icon: ScrollText },
+            { id: 'projeler', etiket: 'Projeler & Vaatler', Icon: Target },
+            { id: 'galeri', etiket: 'Galeri', Icon: Image },
+            { id: 'iletisim', etiket: 'İletişim', Icon: Phone },
           ].map((item) => (
             <button
               key={item.id}
               onClick={() => setAktifSekme(item.id)}
-              className={`px-6 py-4 whitespace-nowrap transition border-b-2 ${
+              className={`px-6 py-4 whitespace-nowrap transition border-b-2 flex items-center gap-1.5 ${
                 aktifSekme === item.id 
                   ? 'border-kutlu-teal-600 text-kutlu-teal-700 bg-kutlu-teal-50/80' 
                   : 'border-transparent text-kutlu-ink-600 hover:text-kutlu-teal-600 hover:bg-kutlu-ink-50'
               }`}
             >
+              <item.Icon size={16} strokeWidth={2.25} />
               {item.etiket}
             </button>
           ))}
@@ -135,11 +137,11 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday, yukleniyor
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-2xl border border-kutlu-teal-100 shadow-sm">
-                <h3 className="text-xl font-bold text-kutlu-teal-600 mb-2">📍 Bölge Bilgisi</h3>
+                <h3 className="text-xl font-bold text-kutlu-teal-600 mb-2 flex items-center gap-1.5"><MapPin size={18} /> Bölge Bilgisi</h3>
                 <p className="text-kutlu-ink-700 font-medium">{aktifAday.unvan || "Seçim Bölgesi"}</p>
               </div>
               <div className="bg-white p-6 rounded-2xl border border-kutlu-teal-100 shadow-sm">
-                <h3 className="text-xl font-bold text-emerald-600 mb-2">💬 İletişim Kanalları</h3>
+                <h3 className="text-xl font-bold text-emerald-600 mb-2 flex items-center gap-1.5"><MessageCircle size={18} /> İletişim Kanalları</h3>
                 <p className="text-kutlu-ink-600 text-sm leading-relaxed">WhatsApp ve sosyal medya hesapları üzerinden doğrudan erişim sağlayabilirsiniz.</p>
               </div>
             </div>
@@ -172,7 +174,7 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday, yukleniyor
         
         {/* Başlık (Koyu Lacivert) */}
         <h2 className="text-2xl font-black text-kutlu-teal-950 flex items-center gap-2">
-          🎯 Seçim Vaatleri ve Projeler
+          <Target size={22} /> Seçim Vaatleri ve Projeler
         </h2>
         
         {/* Toplam Proje Rozeti (Açık Mavi Kutucuk + Mavi Yazı) */}
@@ -278,9 +280,9 @@ export default function AdayDetay({ adayVerisi, adaylar, defaultAday, yukleniyor
                   href={whatsappLinkOlustur(aktifAday.whatsapp)} 
                   target="_blank" 
                   rel="noreferrer"
-                  className="block bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg transition text-lg"
+                  className="block bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg transition text-lg flex items-center justify-center gap-2"
                 >
-                  💬 WhatsApp İletişim Hattı
+                  <MessageCircle size={20} /> WhatsApp İletişim Hattı
                 </a>
               )}
               <div className="flex justify-center gap-4">

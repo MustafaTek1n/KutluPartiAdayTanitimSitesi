@@ -5,11 +5,10 @@
 
 [TR] Bu proje; **Kutlu Parti** adayları için dinamik, modern ve kurumsal kimliğe uygun kişiselleştirilmiş web siteleri oluşturmayı sağlayan React, Vite, Tailwind CSS ve Firebase tabanlı full-stack bir yönetim ve vitrin platformudur.
 
-![React](https://img.shields.io/badge/React-18-149ECA?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%26%20Auth-FFA000?logo=firebase&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-v4-0B5B4E)
-![License](https://img.shields.io/badge/license-MIT-black)
 
 ---
 
@@ -161,4 +160,4 @@ Gallery and profile fields require a **direct image file link** — opening the 
 
 ---
 
-<p align="center">Built with ❤️ for Kutlu Parti.</p>
+<p align="center">Built for Kutlu Parti.</p>

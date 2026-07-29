@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { db, auth } from '../firebase'
+import { Landmark, RotateCcw, User, ScrollText, Target, Image, Phone, FolderOpen, LogOut, Save, Rocket, Loader2, Pencil, Trash2, CheckCircle2 } from 'lucide-react'
 
 export default function Admin({ adaylar }) {
   // OTURUM / GİRİŞ DURUMU
@@ -134,11 +135,11 @@ export default function Admin({ adaylar }) {
       setDuzenlenenSlug(slug)
 
       if (duzenlenenSlug) {
-        alert(`✅ ${form.ad} isimli adayın web sitesi başarıyla güncellendi!`)
+        alert(`${form.ad} isimli adayın web sitesi başarıyla güncellendi!`)
       }
     } catch (error) {
       console.error('Firestore kayıt hatası:', error)
-      alert('❌ Kaydetme sırasında bir hata oluştu, lütfen tekrar deneyin.')
+      alert('Kaydetme sırasında bir hata oluştu, lütfen tekrar deneyin.')
     } finally {
       setKaydediliyor(false)
     }
@@ -180,7 +181,7 @@ export default function Admin({ adaylar }) {
         if (duzenlenenSlug === slug) formSifirla()
       } catch (error) {
         console.error('Firestore silme hatası:', error)
-        alert('❌ Silme sırasında bir hata oluştu, lütfen tekrar deneyin.')
+        alert('Silme sırasında bir hata oluştu, lütfen tekrar deneyin.')
       }
     }
   }
@@ -212,7 +213,7 @@ export default function Admin({ adaylar }) {
     return (
       <div className="min-h-screen bg-kutlu-ink-900 flex items-center justify-center p-6">
         <form onSubmit={girisYap} className="bg-kutlu-ink-800 border border-kutlu-ink-700 rounded-2xl p-8 w-full max-w-sm shadow-2xl space-y-4">
-          <h2 className="text-xl font-bold text-white text-center mb-2">🏛️ Kutlu Parti Admin Girişi</h2>
+          <h2 className="text-xl font-bold text-white text-center mb-2 flex items-center justify-center gap-2"><Landmark size={22} /> Kutlu Parti Admin Girişi</h2>
 
           {girisHatasi && (
             <p className="bg-red-950/60 border border-red-700 text-red-300 text-xs rounded-xl p-3 text-center">{girisHatasi}</p>
@@ -260,7 +261,7 @@ export default function Admin({ adaylar }) {
       <aside className="w-full md:w-64 bg-kutlu-ink-800 border-r border-kutlu-ink-700 p-6 flex flex-col justify-between">
         <div>
           <h2 className="text-xl font-bold text-red-500 mb-6 flex items-center gap-2">
-            🏛️ Kutlu Parti Admin
+            <Landmark size={22} /> Kutlu Parti Admin
           </h2>
           
           <button 
@@ -268,26 +269,27 @@ export default function Admin({ adaylar }) {
             onClick={formSifirla}
             className="w-full bg-kutlu-teal-600 hover:bg-kutlu-teal-500 text-white font-bold p-3 rounded-xl mb-4 transition text-sm flex items-center justify-center gap-2"
           >
-            ➕ Formu Sıfırla
+            <RotateCcw size={16} /> Formu Sıfırla
           </button>
 
           <nav className="space-y-2">
             {[
-              { id: 'genel', etiket: '👤 Genel Bilgiler' },
-              { id: 'biyografi', etiket: '📜 Biyografi & Mesaj' },
-              { id: 'projeler', etiket: '🎯 Projeler & Vaatler' },
-              { id: 'galeri', etiket: '🖼️ Fotoğraf Galerisi' },
-              { id: 'iletisim', etiket: '📞 İletişim & Sosyal' },
-              { id: 'liste', etiket: `📂 Üretilen Siteler (${Object.keys(adaylar || {}).length})` },
+              { id: 'genel', etiket: 'Genel Bilgiler', Icon: User },
+              { id: 'biyografi', etiket: 'Biyografi & Mesaj', Icon: ScrollText },
+              { id: 'projeler', etiket: 'Projeler & Vaatler', Icon: Target },
+              { id: 'galeri', etiket: 'Fotoğraf Galerisi', Icon: Image },
+              { id: 'iletisim', etiket: 'İletişim & Sosyal', Icon: Phone },
+              { id: 'liste', etiket: `Üretilen Siteler (${Object.keys(adaylar || {}).length})`, Icon: FolderOpen },
             ].map((s) => (
               <button
                 key={s.id}
                 type="button"
                 onClick={() => setPanelSekme(s.id)}
-                className={`w-full text-left p-3 rounded-xl font-medium transition ${
+                className={`w-full text-left p-3 rounded-xl font-medium transition flex items-center gap-2 ${
                   panelSekme === s.id ? 'bg-red-600 text-white' : 'text-kutlu-ink-400 hover:bg-kutlu-ink-700/50'
                 }`}
               >
+                <s.Icon size={16} />
                 {s.etiket}
               </button>
             ))}
@@ -296,9 +298,9 @@ export default function Admin({ adaylar }) {
           <button
             type="button"
             onClick={cikisYap}
-            className="w-full text-left p-3 mt-2 rounded-xl font-medium text-kutlu-ink-500 hover:bg-kutlu-ink-700/50 hover:text-red-400 transition text-sm"
+            className="w-full text-left p-3 mt-2 rounded-xl font-medium text-kutlu-ink-500 hover:bg-kutlu-ink-700/50 hover:text-red-400 transition text-sm flex items-center gap-2"
           >
-            🚪 Çıkış Yap
+            <LogOut size={16} /> Çıkış Yap
           </button>
         </div>
 
@@ -307,9 +309,15 @@ export default function Admin({ adaylar }) {
           type="button"
           onClick={siteKaydet} 
           disabled={kaydediliyor}
-          className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-6 cursor-pointer"
+          className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-6 cursor-pointer flex items-center justify-center gap-2"
         >
-          {kaydediliyor ? '⏳ Kaydediliyor...' : duzenlenenSlug ? '💾 Değişiklikleri Kaydet' : '🚀 Web Sitesini Üret'}
+          {kaydediliyor ? (
+            <><Loader2 size={18} className="animate-spin" /> Kaydediliyor...</>
+          ) : duzenlenenSlug ? (
+            <><Save size={18} /> Değişiklikleri Kaydet</>
+          ) : (
+            <><Rocket size={18} /> Web Sitesini Üret</>
+          )}
         </button>
       </aside>
 
@@ -320,7 +328,7 @@ export default function Admin({ adaylar }) {
           {/* DÜZENLEME MODU BİLDİRİMİ */}
           {duzenlenenSlug && (
             <div className="bg-kutlu-orange-950/80 border border-kutlu-orange-500 p-4 rounded-xl flex items-center justify-between text-kutlu-orange-300 text-sm">
-              <span>✏️ Şu an <strong>"{form.ad}"</strong> adayın web sitesini düzenliyorsunuz.</span>
+              <span className="flex items-center gap-1.5"><Pencil size={16} /> Şu an <strong>"{form.ad}"</strong> adayın web sitesini düzenliyorsunuz.</span>
               <button onClick={formSifirla} className="bg-kutlu-orange-800 hover:bg-kutlu-orange-700 text-white text-xs px-3 py-1.5 rounded-lg">İptal Et</button>
             </div>
           )}
@@ -328,7 +336,7 @@ export default function Admin({ adaylar }) {
           {/* BAŞARILI BİLDİRİM KUTUSU */}
           {uretilenLink && (
             <div className="bg-emerald-950/80 border-2 border-emerald-500 p-6 rounded-2xl shadow-2xl">
-              <h3 className="text-lg font-bold text-emerald-400 mb-2">🎉 Web Sitesi Yayında!</h3>
+              <h3 className="text-lg font-bold text-emerald-400 mb-2 flex items-center gap-2"><CheckCircle2 size={20} /> Web Sitesi Yayında!</h3>
               <div className="flex items-center gap-3 bg-kutlu-ink-900 p-3 rounded-xl border border-kutlu-ink-700">
                 <input type="text" readOnly value={uretilenLink} className="w-full bg-transparent text-emerald-300 font-mono text-sm focus:outline-none" />
                 <a href={uretilenLink} target="_blank" rel="noreferrer" className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg whitespace-nowrap">
@@ -359,11 +367,11 @@ export default function Admin({ adaylar }) {
                         <a href={`/aday/${slug}`} target="_blank" rel="noreferrer" className="bg-kutlu-ink-800 hover:bg-kutlu-ink-700 text-kutlu-ink-200 text-xs px-3 py-2 rounded-lg border border-kutlu-ink-600">
                           Görüntüle ↗
                         </a>
-                        <button onClick={() => adayDuzenle(slug)} className="bg-kutlu-orange-600 hover:bg-kutlu-orange-500 text-white text-xs font-bold px-3 py-2 rounded-lg">
-                          ✏️ Düzenle
+                        <button onClick={() => adayDuzenle(slug)} className="bg-kutlu-orange-600 hover:bg-kutlu-orange-500 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1.5">
+                          <Pencil size={14} /> Düzenle
                         </button>
-                        <button onClick={() => adaySil(slug)} className="bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold px-3 py-2 rounded-lg">
-                          🗑️ Sil
+                        <button onClick={() => adaySil(slug)} className="bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1.5">
+                          <Trash2 size={14} /> Sil
                         </button>
                       </div>
                     </div>
@@ -445,7 +453,7 @@ export default function Admin({ adaylar }) {
                             onClick={() => vaatSil(i)}
                             className="bg-kutlu-ink-700 hover:bg-red-900/50 text-red-400 border border-kutlu-ink-600 px-3.5 rounded-xl font-bold transition"
                           >
-                            🗑️
+                            <Trash2 size={16} />
                           </button>
                         )}
                       </div>
@@ -482,7 +490,7 @@ export default function Admin({ adaylar }) {
                             onClick={() => fotoSil(i)}
                             className="bg-kutlu-ink-700 hover:bg-red-900/50 text-red-400 border border-kutlu-ink-600 px-3.5 rounded-xl font-bold transition"
                           >
-                            🗑️
+                            <Trash2 size={16} />
                           </button>
                         )}
                       </div>

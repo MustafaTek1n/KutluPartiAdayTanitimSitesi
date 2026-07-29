@@ -5,6 +5,8 @@ import { db } from './firebase'
 import Admin from './pages/Admin'
 import AdayDetay from './pages/AdayDetay'
 import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import { Mail, X, Send } from 'lucide-react'
 
 export default function App() {
   // Candidate data now lives in Firestore ("adaylar" collection, doc id = slug)
@@ -52,10 +54,11 @@ export default function App() {
     <Router>
       <div className="relative">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home adaylar={adaylar} />} />
           <Route path="/aday" element={<AdayDetay adayVerisi={defaultAday} />} />
           <Route path="/aday/:slug" element={<AdayDetay adaylar={adaylar} defaultAday={defaultAday} yukleniyor={yukleniyor} />} />
           <Route path="/admin" element={<Admin adaylar={adaylar} />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
         {/* Floating Contact Widget */}
@@ -66,7 +69,7 @@ export default function App() {
             <div className="mb-4 w-80 md:w-96 bg-kutlu-ink-900 border border-kutlu-ink-700/80 rounded-2xl p-5 shadow-2xl backdrop-blur-md animate-fadeIn">
               <div className="flex items-center justify-between border-b border-kutlu-ink-800 pb-3 mb-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">✉️</span>
+                  <Mail size={18} className="text-kutlu-teal-400" />
                   <div>
                     <h4 className="font-bold text-white text-sm">Bize Ulaşın</h4>
                     <p className="text-[10px] text-kutlu-ink-400">Görüş ve taleplerinizi iletin</p>
@@ -74,9 +77,9 @@ export default function App() {
                 </div>
                 <button 
                   onClick={() => setIletisimAcik(false)}
-                  className="text-kutlu-ink-400 hover:text-white text-lg font-bold w-6 h-6 flex items-center justify-center rounded-lg hover:bg-kutlu-ink-800"
+                  className="text-kutlu-ink-400 hover:text-white w-6 h-6 flex items-center justify-center rounded-lg hover:bg-kutlu-ink-800"
                 >
-                  ✕
+                  <X size={16} />
                 </button>
               </div>
 
@@ -154,7 +157,7 @@ export default function App() {
                   type="submit" 
                   className="w-full bg-kutlu-teal-600 hover:bg-kutlu-teal-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2"
                 >
-                  📨 E-Posta Gönder
+                  <Send size={14} /> E-Posta Gönder
                 </button>
               </form>
             </div>
@@ -167,9 +170,9 @@ export default function App() {
             title="Bize Ulaşın"
           >
             {iletisimAcik ? (
-              <span className="text-xl font-bold">✕</span>
+              <X size={22} />
             ) : (
-              <span className="text-2xl group-hover:rotate-12 transition-transform duration-300">✉️</span>
+              <Mail size={20} className="group-hover:rotate-12 transition-transform duration-300" />
             )}
             
             {/* Status indicator pulse dot */}
