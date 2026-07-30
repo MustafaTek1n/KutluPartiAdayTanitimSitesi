@@ -9,6 +9,9 @@
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%26%20Auth-FFA000?logo=firebase&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-v4-0B5B4E)
+![Live](https://img.shields.io/badge/Live-kutlu--parti--aday--tanitim--sitesi.vercel.app-1F6F62?logo=vercel&logoColor=white)
+
+**🔗 Live / Canlı:** [kutlu-parti-aday-tanitim-sitesi.vercel.app](https://kutlu-parti-aday-tanitim-sitesi.vercel.app/)
 
 ---
 
@@ -89,6 +92,7 @@ src/
 └── index.css            # Tailwind @theme brand color palette
 public/
 └── logo.png              # Official Kutlu Parti logo
+vercel.json                # SPA rewrite rule (fixes 404 on client-side routes)
 .env                       # Environment variables (Git-ignored)
 ```
 
@@ -164,7 +168,7 @@ Gallery and profile fields require a **direct image file link** — opening the 
 
 ## 🗺️ Roadmap / Yol Haritası
 
-- [ ] Public deployment (Vercel) / Canlıya alma (Vercel)
+- [x] Public deployment (Vercel) / Canlıya alma (Vercel)
 - [ ] Direct image upload via Firebase Storage instead of external URL hosting / Harici URL yerine Firebase Storage üzerinden doğrudan görsel yükleme
 
 ---
