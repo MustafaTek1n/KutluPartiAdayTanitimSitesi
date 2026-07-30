@@ -28,6 +28,10 @@
   * **✏️ Edit Mode:** Pulls existing candidate data into the form for quick, safe updates.
   * **🚀 Instant Link Generation:** One-click copy and live preview of each candidate's generated URL.
 * **📱 Tabbed Candidate Page (`/aday/:slug`):** Displays biography, campaign promises, photo gallery, and contact details in clean, accessible tabs.
+* **🏠 Real Candidate Directory:** The landing page pulls every registered candidate from Firestore and displays them as clickable photo cards — no longer just a static template preview.
+* **🎨 Custom Icon Set:** All emoji have been replaced with `lucide-react` icons across the admin panel, candidate pages, and contact widget for a more professional, consistent look.
+* **🚫 404 Page:** Unmatched routes render a branded not-found page instead of a blank screen.
+* **🔗 Open Graph & Favicon:** Custom favicon (party logo), proper page title, and Open Graph/Twitter card meta tags so shared links show a real preview on WhatsApp, Instagram, and X.
 * **🔥 Firestore-Backed Persistence:** All candidate data lives in Firebase Firestore and updates in real time across every visitor's browser via `onSnapshot` — no more browser-local-only data.
 * **🔒 Rule-Based Security:** Firestore Security Rules allow public read access (so candidate pages stay visible to everyone) while restricting write/delete operations to authenticated admin sessions only.
 
@@ -49,6 +53,10 @@
   * **✏️ Düzenle Modu:** Mevcut aday verilerini forma çekerek hızlı ve güvenli güncelleme sağlar.
   * **🚀 Anında Link Üretimi:** Üretilen aday linkinin tek tıkla kopyalanması ve anlık önizlemesi.
 * **📱 Sekmeli Aday Sayfası (`/aday/:slug`):** Özgeçmiş, seçim vaatleri, fotoğraf galerisi ve iletişim bilgilerini düzenli sekmeler halinde sunar.
+* **🏠 Gerçek Aday Dizini:** Anasayfa, Firestore'daki tüm kayıtlı adayları çekip tıklanabilir fotoğraf kartları halinde gösterir — artık sadece statik şablon önizlemesi değil.
+* **🎨 Özel İkon Seti:** Yönetim paneli, aday sayfaları ve iletişim widget'ındaki tüm emoji'ler `lucide-react` ikonlarıyla değiştirildi, daha profesyonel ve tutarlı bir görünüm.
+* **🚫 404 Sayfası:** Eşleşmeyen adreslerde boş ekran yerine markaya uygun bir "sayfa bulunamadı" ekranı gösterilir.
+* **🔗 Open Graph & Favicon:** Özel favicon (parti logosu), doğru sayfa başlığı ve Open Graph/Twitter kart etiketleri sayesinde WhatsApp, Instagram ve X'te paylaşılan linkler gerçek bir önizleme gösterir.
 * **🔥 Firestore Tabanlı Kalıcılık:** Tüm aday verileri Firebase Firestore'da tutulur ve `onSnapshot` sayesinde her ziyaretçinin tarayıcısında gerçek zamanlı güncellenir — artık veri yalnızca tek bir tarayıcıda kalmaz.
 * **🔒 Kural Tabanlı Güvenlik:** Firestore Güvenlik Kuralları herkese açık okumaya izin verirken (aday sayfaları herkese görünür kalır), yazma/silme işlemlerini yalnızca giriş yapmış yönetici oturumlarıyla sınırlar.
 
@@ -61,6 +69,7 @@
 | Core Framework | React, Vite |
 | Routing & Security | React Router DOM, Firebase Auth Guard |
 | Styling | Tailwind CSS v4 (`@theme` custom palette) |
+| Icons | lucide-react |
 | Forms & Email | Web3Forms API |
 | Backend & Storage | Firebase (Firestore + Authentication) |
 
@@ -73,7 +82,8 @@ src/
 ├── pages/
 │   ├── Home.jsx        # Landing page ("/")
 │   ├── Admin.jsx        # Admin dashboard ("/admin", auth-protected)
-│   └── AdayDetay.jsx    # Candidate page ("/aday", "/aday/:slug")
+│   ├── AdayDetay.jsx    # Candidate page ("/aday", "/aday/:slug")
+│   └── NotFound.jsx     # 404 page (catch-all "*" route)
 ├── App.jsx              # Routing, Firestore listener, global state
 ├── firebase.js          # Firebase config + Firestore/Auth initialization
 └── index.css            # Tailwind @theme brand color palette
@@ -154,9 +164,8 @@ Gallery and profile fields require a **direct image file link** — opening the 
 
 ## 🗺️ Roadmap / Yol Haritası
 
-- [ ] Real registered candidate list on the landing page / Anasayfaya gerçek/kayıtlı aday listesi
-- [ ] Replace emoji icons with a proper icon set (e.g. Heroicons) / Emoji ikonların kurumsal bir ikon setiyle değiştirilmesi
-- [ ] Catch-all / 404 route / 404 rotası eklenmesi
+- [ ] Public deployment (Vercel) / Canlıya alma (Vercel)
+- [ ] Direct image upload via Firebase Storage instead of external URL hosting / Harici URL yerine Firebase Storage üzerinden doğrudan görsel yükleme
 
 ---
 
