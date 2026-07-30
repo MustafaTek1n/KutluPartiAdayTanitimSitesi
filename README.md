@@ -165,11 +165,7 @@ Gallery and profile fields require a **direct image file link** — opening the 
 
 - Designed for a single-admin scenario; no multi-role permission system / Tek admin senaryosu için tasarlanmıştır, çoklu rol yönetimi yoktur
 - Firebase project runs on the free **Spark** plan quotas / Firebase projesi ücretsiz **Spark** planı kotalarına tabidir
-
-## 🗺️ Roadmap / Yol Haritası
-
-- [x] Public deployment (Vercel) / Canlıya alma (Vercel)
-- [ ] Direct image upload via Firebase Storage instead of external URL hosting / Harici URL yerine Firebase Storage üzerinden doğrudan görsel yükleme
+- Images are added via external URL (imgbb, imgur, etc.) rather than direct upload. This is a deliberate choice: Firebase Storage now requires the pay-as-you-go **Blaze** plan (with a linked card) even for free-tier usage, and this project intentionally stays on Spark to avoid that requirement. / Görseller doğrudan yükleme yerine harici link (imgbb, imgur vb.) ile ekleniyor. Bu bilinçli bir tercih: Firebase Storage artık ücretsiz kullanım için bile kredi kartı bağlı **Blaze** planını zorunlu kılıyor; bu proje bilinçli olarak Spark planında kalmayı tercih ediyor.
 
 ---
 
